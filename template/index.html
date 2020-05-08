@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>单元</th>
+                    <th>单词</th>
+                    <th>意思</th>
+                    <th>读音</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for='(item,index) in list'>
+                    <td scope="row">[[item.单元]]</td>
+                    <td>[[item.单词]]</td>
+                    <td>[[item.意思]]</td>
+                    <td>
+                        <audio controls :src='item.语音'></audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>  
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list:[]
+            },
+            mounted() {
+                this.get_data()
+            },
+            methods: {
+                get_data(){
+                    this.$http.get('/login').then(rsp=>{
+                        this.list=rsp.body
+                    })
+                }
+            },
+            delimiters:["[[","]]"]
+        });
+    </script>
+</body>
+</html>
