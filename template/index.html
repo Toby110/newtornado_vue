@@ -5,55 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="icon" href="../static/my.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
 </head>
 
-    
-</style>
-
 <body>
     <div id="app">
         <table class="table">
-            <thead class="table table-dark" >
+            <thead>
                 <tr>
-                    <th>单元
-                        <select v-model="unit">
-                            <option>Unit 1</option>
-                            <option>Unit 2</option>
-                            <option>Unit 3</option>
-                            <option>Unit 4</option>
-                            <option>Unit 5</option>
-                            <option>Unit 6</option>
-                            <option>Unit 7</option>
-                            <option>Unit 8</option>
-                            <option>Unit 9</option>
-                            <option>Unit 10</option>
-                            <option>Unit 11</option>
-                            <option>Unit 12</option>                        
-                        </select>
-                    </th>
-                    <th>单词测试</th>
-                    <th><button  @click="change" type="button" class="btn btn-primary">学习&测试（切换）</button></th>
-                   
+                    <th>单元</th>
+                    <th>单词</th>
                     <th>意思</th>
                     <th>读音</th>
                 </tr>
-            </thead>    
+            </thead>
             <tbody>
-                <tr v-for='(item,index) in search(unit)' :key='index'>
+                <tr v-for='(item,index) in list'>
                     <td scope="row">[[item.单元]]</td>
-                    <td><input type="text"  @keyup='check($event,item)'></td>
-                    <td v-show='flag'>[[item.单词]]</td>
+                    <td>[[item.单词]]</td>
                     <td>[[item.意思]]</td>
                     <td>
-                        <div>
-                            <audio controls :src='item.语音' style="width: 200px;"></audio>
-                        </div>
-                        
+                        <audio controls :src='item.语音'></audio>
                     </td>
                 </tr>
                 <tr>
@@ -68,8 +41,6 @@
         var vm = new Vue({
             el: '#app',
             data: {
-                flag:true,
-                unit:'',
                 list:[]
             },
             mounted() {
@@ -80,27 +51,6 @@
                     this.$http.get('/login').then(rsp=>{
                         this.list=rsp.body
                     })
-                },
-                search(unit) {
-                 
-                    return this.list.filter(item => {
-                        if (item.单元.includes(unit)) {
-                            return true;
-                        }
-                    })
-                },
-                check(e,item){
-                    if(e.target.value===item.单词){                    
-                        var music=new Audio(item.语音)
-                        music.play()
-
-                    }
-                    
-
-                },
-                change(){
-                    this.flag=!this.flag
-                   
                 }
             },
             delimiters:["[[","]]"]
